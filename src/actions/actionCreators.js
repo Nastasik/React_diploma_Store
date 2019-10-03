@@ -36,6 +36,8 @@ import {
   FETCH_ID_FAILURE,
   FETCH_CATALOG_REQUEST,
   FETCH_CATALOG_FAILURE,
+  FETCH_CATEGORIES_REQUEST,
+  FETCH_CATEGORIES_FAILURE,
 
 } from './actionTypes';
 
@@ -78,8 +80,12 @@ export const selectCount = (count) => ({
   },
 });
 
-export const changeCost = () => ({
-  type: CHANGE_COST,  
+export const changeCost = (newCount, idPrice) => ({
+  type: CHANGE_COST,
+  payload: {  
+    newCount,
+    idPrice,                   
+  },    
 });
 
 
@@ -250,7 +256,7 @@ export const fetchCatalogFailure = errorCatalog => ({
     errorCatalog,
   },
 });
-
+// --------------------------------------------------------------
 export const fetchCategoriesSuccess = categories => ({
   type: FETCH_CATEGORIES_SUCCESS,
   payload: {
@@ -258,9 +264,21 @@ export const fetchCategoriesSuccess = categories => ({
   },
 });
 
+export const fetchCategoriesRequest = () => ({
+  type: FETCH_CATEGORIES_REQUEST,
+});
+
+export const fetchCategoriesFailure = categoriesError => ({
+  type: FETCH_CATEGORIES_FAILURE,
+  payload: {
+    categoriesError,
+  },
+});
+// ------------------------------------------------------------
 export const fetchServices = (url) => async (dispatch) => {
   
-  dispatch(fetchCatalogRequest());
+  // dispatch(fetchCatalogRequest());
+  dispatch(fetchCategoriesRequest());
   dispatch(fetchIdRequest());
   dispatch(fetchHitsRequest());
   dispatch(fetchServicesRequest());
@@ -283,13 +301,14 @@ export const fetchServices = (url) => async (dispatch) => {
 
     if(url.indexOf("http://localhost:7070/api/items/")!==-1) {
       return dispatch(fetchIdSuccess(data));
-    }
-   
+    }   
+    
     dispatch(fetchServicesSuccess(data));
+    
 
-  } catch (error) {
-
-    dispatch(fetchCatalogFailure(error.message));
+  } catch (error) {   
+   
+    dispatch(fetchCategoriesFailure(error.message));
     dispatch(fetchIdFailure(error.message));
     dispatch(fetchHitsFailure(error.message));
     dispatch(fetchServicesFailure(error.message));
@@ -299,12 +318,11 @@ export const fetchServices = (url) => async (dispatch) => {
 
 // =================================================================
 
-export const addServiceRequest = (owner, items) => ({
+export const addServiceRequest = (order) => ({
   type: ADD_SERVICE_REQUEST,
-  payload: {
-    items,
-    owner,     
-  },
+      payload: {
+        order  
+      },
 })
 
 export const addServiceFailure = message => ({
@@ -320,20 +338,22 @@ export const addServiceSuccess = () => ({
 
 export const addService = () => async (dispatch, getState) => {
   dispatch(addServiceRequest());
-  const {serviceAdd: {order: { owner: { phone, address }, items }}} = getState();
+  const {serviceAdd: {order: {owner, items}}} = getState();
 
   try {
     const response = await fetch('http://localhost:7070/api/order', {
       method: 'POST',
       headers: {  
         'Access-Control-Allow-Origin': 'http://localhost:7070/api/order',      
-        'Content-Type': 'application/json'},
-      body: JSON.stringify({ owner: { phone, address }, items }),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({owner, items}),
     });
 
     if (!response.ok) {
       throw new Error(response.statusText);
     }
+    window.localStorage.clear();
     dispatch(addServiceSuccess());
   } catch (e) {
     dispatch(addServiceFailure(e.message));

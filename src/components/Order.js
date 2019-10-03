@@ -14,11 +14,14 @@ function Order(props) {
         let newCount = cartItem.count + operation;         
         if(newCount === 0 || newCount === 11) return;        
         dispatch(selectCount(newCount));
+        dispatch(changeCost(newCount, idItem.price));  
     }
 
     const changeSize = (event) => {
         const newSize = event.target.innerHTML;       
-        dispatch(selectSize(newSize));               
+        dispatch(selectSize(newSize));
+        const idCart = parseInt(`${idItem.id}${newSize}`);
+        dispatch(selectProperties(idCart, idItem.title, idItem.price));                 
     }
 
     const toStorage = () => {
@@ -29,11 +32,8 @@ function Order(props) {
     }
         
     useEffect(() => {
-        dispatch(fetchServices(urlItem));        
-        const idCart = `${idItem.id}${cartItem.size}`;
-        dispatch(selectProperties(idCart, idItem.title, idItem.price));            
-        dispatch(changeCost());               
-    }, [dispatch, cartItem.size, cartItem.count, cartItem.cost, cartItem.costStorage])
+        dispatch(fetchServices(urlItem)); 
+    }, [dispatch])
 
     return (
 

@@ -4,21 +4,17 @@ import {useSelector, useDispatch} from 'react-redux';
 import {getLocalStorageItems, removeServiceItem, changeOrderField, addService} from '../actions/actionCreators';
 
 function Cart(props) {    
-    const {order, totalCost, loading, error, needClear, success} = useSelector(state => state.serviceAdd);
-    const dispatch = useDispatch();    
-
+    const {order, totalCost, loading, error, success} = useSelector(state => state.serviceAdd);
+    const dispatch = useDispatch();
+    
     const handleChange = event => {
         const {name, value} = event.target;
-        dispatch(changeOrderField(name, value));
-        
-      };
+        dispatch(changeOrderField(name, value));        
+    };
 
     const handleSubmit = event => {    
         event.preventDefault();    
-        dispatch(addService(order.owner.phone, order.owner.address));
-        if(needClear === 'yes') {
-            localStorage.clear();
-        }    
+        dispatch(addService(order.owner.phone, order.owner.address));          
     };
 
     const removeStorageItem = (id) => {
@@ -28,7 +24,7 @@ function Cart(props) {
 
     useEffect(() => {
         dispatch(getLocalStorageItems());       
-    }, [dispatch, localStorage.length])  
+    }, [dispatch])  
 
     return (
         <>
@@ -51,7 +47,7 @@ function Cart(props) {
                             {order.items && order.items.map((item, i) => 
                                 <tr key={item.id}>
                                     <th scope="row">{i + 1}</th>
-                                    <td><Link to={`/products/${item.id.slice(0,-5)}.html`}>{item.title}</Link></td>
+                                    <td><Link to={`/products/${`${item.id}`.slice(0,-2)}.html`}>{item.title}</Link></td>
                                     <td>{item.size}</td>
                                     <td>{item.countStorage}</td>
                                     <td>{item.price}</td>
@@ -59,7 +55,7 @@ function Cart(props) {
                                     <td><button onClick = {() => removeStorageItem(item.id)} className="btn btn-outline-danger btn-sm">Удалить</button></td>
                                 </tr>)}
                             <tr>
-                                <td colspan="5" className="text-right">Общая стоимость</td>
+                                <td colSpan={5} className="text-right">Общая стоимость</td>
                                 <td>{totalCost}</td>
                             </tr>
                         </tbody>
@@ -71,19 +67,19 @@ function Cart(props) {
                 {(error && <p className='error'>Произошла ошибка!</p>) ||
                  (loading && <div className='preloader'><span></span><span></span><span></span><span></span></div>) ||
                  (success && <p className='success'>Заказ оформлен</p>) ||
-                <div className="card" style={{"max-width": "30rem", "margin": "0 auto"}}>
+                <div className="card" style={{"maxWidth": "30rem", "margin": "0 auto"}}>
                     <form onSubmit={handleSubmit} className="card-body">
                         <div className="form-group">
-                            <label for="phone">Телефон</label>
+                            <label htmlFor="phone">Телефон</label>
                             <input className="form-control" name="phone" onChange={handleChange} id="phone" placeholder="Ваш телефон" required/>
                         </div>
                         <div className="form-group">
-                            <label for="address">Адрес доставки</label>
+                            <label htmlFor="address">Адрес доставки</label>
                             <input className="form-control" name="address" onChange={handleChange} id="address" placeholder="Адрес доставки" required/>
                         </div>
                         <div className="form-group form-check">
                             <input type="checkbox" className="form-check-input" id="agreement" required/>
-                            <label className="form-check-label" for="agreement">Согласен с правилами доставки</label>
+                            <label className="form-check-label" htmlFor="agreement">Согласен с правилами доставки</label>
                         </div>
                         <button type="submit" className="btn btn-outline-secondary">Оформить</button>
                     </form>    

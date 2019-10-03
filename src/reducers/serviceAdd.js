@@ -25,12 +25,11 @@ const initialState = {
     title: "",
     price: null,
     count: 1, //отображается при выборе количества
-    countStorage: 0, //суммарное количество, вкл предыдущие заказы
+    countStorage: 1, //суммарное количество, вкл предыдущие заказы
     size: null,  
     cost: 0,  
   },
-
-  needClear: '',
+  
   totalCost: 0,
 
   order: {
@@ -53,8 +52,7 @@ export default function serviceAddReducer(state = initialState, action) {
         ...state,
         loading: true,
         success: false,
-        error: null,
-        needClear: '',      
+        error: null,              
       };
 
     case ADD_SERVICE_FAILURE:
@@ -63,14 +61,12 @@ export default function serviceAddReducer(state = initialState, action) {
         ...state,
         loading: false,
         success: false,
-        error,
-        needClear: '',
+        error,       
       };
 
-    case ADD_SERVICE_SUCCESS:      
+    case ADD_SERVICE_SUCCESS:          
       return {
-        ...initialState,
-        needClear: 'yes',
+        ...initialState,        
         success: true,
       };
 
@@ -135,14 +131,16 @@ export default function serviceAddReducer(state = initialState, action) {
       };
 
   case CHANGE_COST:
-    
+    const {newCount, idPrice} = action.payload;
+    const countStorage = (localStorage.getItem(state.cartItem.id) !== null) ?
+        (JSON.parse(localStorage.getItem(state.cartItem.id)).count + newCount) : newCount;
+   
     return {
       ...state,
       cartItem: {
         ...state.cartItem,  
-        countStorage: (localStorage.getItem(state.cartItem.id) !== null) ?
-            (JSON.parse(localStorage.getItem(state.cartItem.id)).count + state.cartItem.count) : state.cartItem.count,     
-        cost: state.cartItem.price * state.cartItem.countStorage,
+        countStorage: countStorage,     
+        cost: idPrice * countStorage,
       }   
     };
 

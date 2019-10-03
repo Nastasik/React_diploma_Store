@@ -5,7 +5,7 @@ import CatalogCards from './CatalogCards.js';
 import {NavLink} from 'react-router-dom';
 
 function Catalog(props) {
-    const {items, categories, loadingCatalog, errorCatalog} = useSelector(state => state.serviceList);
+    const {items, categories, categoriesLoading} = useSelector(state => state.serviceList);
     const dispatch = useDispatch();
     const urlCategories =  "http://localhost:7070/api/categories";
 
@@ -25,8 +25,8 @@ function Catalog(props) {
         <section className="catalog">
             <h2 className="text-center">Каталог</h2>
                 {props.children}
-            {(loadingCatalog && <div className='preloader'><span></span><span></span><span></span><span></span></div>) ||
-            (errorCatalog && <p className='error'>Произошла ошибка!</p>) ||
+            {(categoriesLoading && <div className='preloader'><span></span><span></span><span></span><span></span></div>) ||
+            
             <>
                 <ul className="catalog-categories nav justify-content-center">
                             <NavLink onClick={() => onSelectCategory("Все")} to="#" className="nav-link" activeClassName="active" key={"Все"}>
@@ -36,7 +36,7 @@ function Catalog(props) {
                             <NavLink onClick={() => onSelectCategory(item)} to="#" className="nav-link" activeClassName="active" key={item.id}>
                                 <li className="nav-item">{item.title}</li>
                             </NavLink>)}     
-                </ul>
+                </ul>               
                 <CatalogCards/>
                 {items.length === 6 && 
                     <div className="text-center">
