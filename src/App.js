@@ -26,7 +26,7 @@ function App() {
   
   return (
     <Router>           
-        <Redirect to="/" />
+        {/* <Redirect to="/" /> */}
         <Header/>
         <Container>
           <Switch>        

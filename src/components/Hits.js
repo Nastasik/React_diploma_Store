@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import {useSelector, useDispatch} from 'react-redux';
-import {fetchServices} from '../actions/actionCreators';
+import {fetchHits} from '../actions/actionCreators';
 import Card from './Card.js';
 
 function Hits(props) {
@@ -9,7 +9,7 @@ function Hits(props) {
     const urlHits = 'http://localhost:7070/api/top-sales';
 
     useEffect(() => {
-        dispatch(fetchServices(urlHits))
+        dispatch(fetchHits(urlHits))
     }, [dispatch])
 
     return (

@@ -27,11 +27,13 @@ import {
 
 const initialState = {
   items: [],
+  catalogItems: [],
   hits: [],
   categories: [],
-  selectedCategory: undefined,
+  selectedCategory: "Все",
   offset: 6,
   search: "",    
+  searchRequest: "",
   itemsUrl: "http://localhost:7070/api/items",
   idItem: [], 
   loading: false,
@@ -70,6 +72,7 @@ export default function serviceListReducer(state = initialState, action) {
       return {
         ...state,
         items,        
+        catalogItems: [...state.catalogItems, ...items],
         loading: false,
         error: null,
         
@@ -176,19 +179,22 @@ export default function serviceListReducer(state = initialState, action) {
         return {      
           ...state,
           selectedCategory,
+          catalogItems: [],
           offset: 6,      
-          itemsUrl: initialState.itemsUrl + (!selectedCategory.id ? "" : `?categoryId=${selectedCategory.id}`),
+          // itemsUrl: initialState.itemsUrl + (!selectedCategory.id ? "" : `?categoryId=${selectedCategory.id}`),
           loading: false,
           error: null,
         };
 
     case CHANGE_SEARCH_REQUEST:
-        const  urlWithoutSearch = state.itemsUrl.indexOf('?q')!==-1 ? (state.itemsUrl.split('?q').slice(0, 1).join('')) : state.itemsUrl.split('&q').slice(0, 1).join('')
+        // const urlWithoutSearch = state.itemsUrl.indexOf('?q')!==-1 ? (state.itemsUrl.split('?q').slice(0, 1).join('')) : state.itemsUrl.split('&q').slice(0, 1).join('')
       return {      
         ...state,
         selectedCategory,    
-        offset: 6,      
-        itemsUrl: urlWithoutSearch + (urlWithoutSearch.indexOf('?')!==-1 ? `&q=${state.search}` : `?q=${state.search}`),
+        offset: 6,     
+        searchRequest: state.search,
+        catalogItems: [],
+        // itemsUrl: urlWithoutSearch + (urlWithoutSearch.indexOf('?')!==-1 ? `&q=${state.search}` : `?q=${state.search}`),
         loading: false,
         error: null,
       };
@@ -203,13 +209,15 @@ export default function serviceListReducer(state = initialState, action) {
       }
     
     case CHANGE_OFFSET:
-        const  urlWithoutOffset = state.itemsUrl.indexOf('?offset')!==-1 ? (state.itemsUrl.split('?offset').slice(0, 1).join('')) : state.itemsUrl.split('&offset').slice(0, 1).join('')
+        // const  urlWithoutOffset = state.itemsUrl.indexOf('?offset')!==-1 ? (state.itemsUrl.split('?offset').slice(0, 1).join('')) : state.itemsUrl.split('&offset').slice(0, 1).join('')
+        const offset = state.offset + 6
    
         return {
             ...state,
-            offset: state.offset+6,
+            offset: offset,
+            // catalogItems: [...state.catalogItems, ...state.items],
             // urlWithoutOffset: state.itemsUrl.split('?offset' || '&offset' || null).slice(0, 1).join(''),          
-            itemsUrl: urlWithoutOffset + ((urlWithoutOffset===initialState.itemsUrl) ? `?offset=${state.offset}` : `&offset=${state.offset}`),       
+            // itemsUrl: urlWithoutOffset + ((urlWithoutOffset===initialState.itemsUrl) ? `?offset=${state.offset}` : `&offset=${state.offset}`),       
             loading: false,
             error: null,
         };

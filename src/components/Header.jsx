@@ -1,20 +1,22 @@
 import React, {useState} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import logo from '../css/img/header-logo.png';
 import Search from './Search.js';
+import {changeSearchRequest} from '../actions/actionCreators';
 
 function Header(props) {    
-    
     const {search} = useSelector(state => state.serviceList);
     const {order} = useSelector(state => state.serviceAdd);
     const [isOpen, setIsOpen] = useState('');
+    const dispatch = useDispatch(); 
 
     const openSearch = (event) => {
         if (isOpen === '')  {
             setIsOpen('open')
         } else {
             if(search !== "") { 
+                dispatch(changeSearchRequest());
                 props.history.push("/catalog.html");
             }
             setIsOpen(''); 

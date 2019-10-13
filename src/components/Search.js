@@ -10,8 +10,8 @@ function Search(props) {
     
     const onSubmit = (event) => {
         event.preventDefault();
+        dispatch(changeSearchRequest());
         if(search !== "") {        
-            dispatch(changeSearchRequest());
             if (isGo === "Yes") {                
                 const {name, value} = event.target;                        
                 dispatch(changeServiceField(name, value));                         
@@ -19,11 +19,12 @@ function Search(props) {
         }    
     }
 
-    const onBlur = () => {
-        if(search === "") {
-            setIsOpen("");
-        }
-    }
+    // const onBlur = () => {
+    //     if(search === "") {
+    //         setIsOpen("");
+    //     }
+    // }
+    // onBlur={() => onBlur()}
 
     const onChangeInput = (event) => {
         const {value} = event.target;
@@ -32,7 +33,7 @@ function Search(props) {
    
     return (
         <form onSubmit={(event) => onSubmit(event)} className={`${searchClass} form-inline`}>
-            <input type="text" name="search" value={search} onBlur={() => onBlur()} onChange={(event) => onChangeInput(event)} className="form-control" placeholder="Поиск"/>
+            <input type="text" name="search" value={search} onChange={(event) => onChangeInput(event)} className="form-control" placeholder="Поиск"/>
         </form>
     )
 }

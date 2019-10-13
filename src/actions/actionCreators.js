@@ -202,6 +202,23 @@ export const fetchServicesSuccess = items => ({
     items,
   },
 });
+
+export const fetchServices = (url) => async (dispatch) => {
+  dispatch(fetchServicesRequest());
+  
+  try {    
+    const response = await fetch(`${url}`);
+
+    if(!response.ok) {
+      throw new Error(response.statusText);
+    }
+    const data = await response.json();
+    dispatch(fetchServicesSuccess(data));  
+
+  } catch (error) {   
+    dispatch(fetchServicesFailure(error.message));
+  }
+};
 // ---------------------------------------------------
 export const fetchIdSuccess = idItem => ({
   type: FETCH_ID_SUCCESS,
@@ -220,6 +237,24 @@ export const fetchIdFailure = errorId => ({
     errorId,
   },
 });
+
+export const fetchId = (url) => async (dispatch) => {
+  
+  dispatch(fetchIdRequest());
+ 
+  try {    
+    const response = await fetch(`${url}`);
+
+    if(!response.ok) {
+      throw new Error(response.statusText);
+    }
+    const data = await response.json();
+    dispatch(fetchIdSuccess(data));
+
+  } catch (error) {   
+    dispatch(fetchIdFailure(error.message));  
+  }
+};
 //------------------------------------------------------
 export const fetchHitsSuccess = hits => ({
   type: FETCH_HITS_SUCCESS,
@@ -238,24 +273,39 @@ export const fetchHitsFailure = hitsError => ({
     hitsError,
   },
 });
+
+export const fetchHits = (url) => async (dispatch) => {
+  dispatch(fetchHitsRequest());
+  
+  try {    
+    const response = await fetch(`${url}`);
+    if(!response.ok) {
+      throw new Error(response.statusText);
+    }
+    const data = await response.json();
+    dispatch(fetchHitsSuccess(data));
+  } catch (error) {   
+    dispatch(fetchHitsFailure(error.message));
+  }
+};
 //---------------------------------------------------------
-export const fetchCatalogSuccess = cards => ({
-  type: FETCH_CATALOG_SUCCESS,
-  payload: {
-    cards,
-  },
-});
+// export const fetchCatalogSuccess = cards => ({
+//   type: FETCH_CATALOG_SUCCESS,
+//   payload: {
+//     cards,
+//   },
+// });
 
-export const fetchCatalogRequest = () => ({
-  type: FETCH_CATALOG_REQUEST,
-});
+// export const fetchCatalogRequest = () => ({
+//   type: FETCH_CATALOG_REQUEST,
+// });
 
-export const fetchCatalogFailure = errorCatalog => ({
-  type: FETCH_CATALOG_FAILURE,
-  payload: {
-    errorCatalog,
-  },
-});
+// export const fetchCatalogFailure = errorCatalog => ({
+//   type: FETCH_CATALOG_FAILURE,
+//   payload: {
+//     errorCatalog,
+//   },
+// });
 // --------------------------------------------------------------
 export const fetchCategoriesSuccess = categories => ({
   type: FETCH_CATEGORIES_SUCCESS,
@@ -274,14 +324,9 @@ export const fetchCategoriesFailure = categoriesError => ({
     categoriesError,
   },
 });
-// ------------------------------------------------------------
-export const fetchServices = (url) => async (dispatch) => {
-  
-  // dispatch(fetchCatalogRequest());
+
+export const fetchCategories = (url) => async (dispatch) => {
   dispatch(fetchCategoriesRequest());
-  dispatch(fetchIdRequest());
-  dispatch(fetchHitsRequest());
-  dispatch(fetchServicesRequest());
   
   try {    
     const response = await fetch(`${url}`);
@@ -290,30 +335,52 @@ export const fetchServices = (url) => async (dispatch) => {
       throw new Error(response.statusText);
     }
     const data = await response.json();
-
-    if(url==="http://localhost:7070/api/categories") {
-      return dispatch(fetchCategoriesSuccess(data));
-    }
-
-    if(url==="http://localhost:7070/api/top-sales") {
-      return dispatch(fetchHitsSuccess(data));
-    }
-
-    if(url.indexOf("http://localhost:7070/api/items/")!==-1) {
-      return dispatch(fetchIdSuccess(data));
-    }   
+    dispatch(fetchCategoriesSuccess(data));
     
-    dispatch(fetchServicesSuccess(data));
-    
-
   } catch (error) {   
-   
     dispatch(fetchCategoriesFailure(error.message));
-    dispatch(fetchIdFailure(error.message));
-    dispatch(fetchHitsFailure(error.message));
-    dispatch(fetchServicesFailure(error.message));
   }
 };
+// ------------------------------------------------------------
+// export const fetchServices = (url) => async (dispatch) => {
+  
+//   // dispatch(fetchCatalogRequest());
+//   dispatch(fetchCategoriesRequest());
+//   dispatch(fetchIdRequest());
+//   dispatch(fetchHitsRequest());
+//   dispatch(fetchServicesRequest());
+  
+//   try {    
+//     const response = await fetch(`${url}`);
+
+//     if(!response.ok) {
+//       throw new Error(response.statusText);
+//     }
+//     const data = await response.json();
+
+//     if(url==="http://localhost:7070/api/categories") {
+//       return dispatch(fetchCategoriesSuccess(data));
+//     }
+
+//     if(url==="http://localhost:7070/api/top-sales") {
+//       return dispatch(fetchHitsSuccess(data));
+//     }
+
+//     if(url.indexOf("http://localhost:7070/api/items/")!==-1) {
+//       return dispatch(fetchIdSuccess(data));
+//     }   
+    
+//     dispatch(fetchServicesSuccess(data));
+    
+
+//   } catch (error) {   
+   
+//     dispatch(fetchCategoriesFailure(error.message));
+//     dispatch(fetchIdFailure(error.message));
+//     dispatch(fetchHitsFailure(error.message));
+//     dispatch(fetchServicesFailure(error.message));
+//   }
+// };
 
 
 // =================================================================

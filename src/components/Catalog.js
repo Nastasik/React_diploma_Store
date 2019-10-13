@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import {useSelector, useDispatch} from 'react-redux';
-import {fetchServices, selectCategory, changeOffset} from '../actions/actionCreators';
+import {fetchCategories, selectCategory, changeOffset} from '../actions/actionCreators';
 import CatalogCards from './CatalogCards.js';
 import {NavLink} from 'react-router-dom';
 
@@ -10,7 +10,7 @@ function Catalog(props) {
     const urlCategories =  "http://localhost:7070/api/categories";
 
     useEffect(() => {
-        dispatch(fetchServices(urlCategories))
+        dispatch(fetchCategories(urlCategories))
     }, [dispatch])
 
     const onSelectCategory = (item) => {

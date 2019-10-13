@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {withRouter} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
-import {fetchServices, selectSize, selectCount, selectProperties, setLocalStorageItems, changeCost} from '../actions/actionCreators';
+import {fetchId, selectSize, selectCount, selectProperties, setLocalStorageItems, changeCost} from '../actions/actionCreators';
 
 function Order(props) {
     const {idItem, loadingId, errorId} = useSelector(state => state.serviceList);
@@ -32,7 +32,7 @@ function Order(props) {
     }
         
     useEffect(() => {
-        dispatch(fetchServices(urlItem)); 
+        dispatch(fetchId(urlItem)); 
     }, [dispatch])
 
     return (

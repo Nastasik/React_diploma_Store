@@ -6,13 +6,12 @@ import {
 } from 'redux';
 import serviceListReducer from '../reducers/serviceList';
 import serviceAddReducer from '../reducers/serviceAdd';
-// import serviceHitsReducer from '../reducers/serviceHits';
+
 import thunk from 'redux-thunk';
 
 const reducer = combineReducers({
   serviceList: serviceListReducer,
   serviceAdd: serviceAddReducer,
-  // serviceHits: serviceHitsReducer,
 
 });
 
