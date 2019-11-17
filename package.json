@@ -2,9 +2,10 @@
   "name": "react-diploma",
   "version": "0.1.0",
   "private": true,
- 
+  "homepage": "http://nastasik.github.io/React_diploma_Store",
   "dependencies": {
     "@material-ui/core": "^4.4.3",
+    "gh-pages": "^2.1.1",
     "nanoid": "^2.1.1",
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
@@ -14,13 +15,14 @@
     "react-scripts": "^2.1.8",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0"
-    
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -37,5 +39,4 @@
       "last 1 safari version"
     ]
   }
-  
 }
